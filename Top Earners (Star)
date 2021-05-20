@@ -1,0 +1,10 @@
+/*
+Enter your query here.
+*/
+SELECT MAX(earning), COUNT(*) FROM(SELECT salary * months earning
+FROM EMPLOYEE) E
+
+WHERE earning = (SELECT MAX(salary * months) max_eanring
+FROM EMPLOYEE)
+
+
