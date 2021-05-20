@@ -1,3 +1,19 @@
+create table Company(company_code varchar(100), founder varchar(100));
+insert into Company(company_code, founder) values('C1', 'Monica'), ('C2', 'Samantha');
+
+create table Lead_Manager(lead_manager_code varchar(100), company_code varchar(100));
+insert into Lead_Manager(lead_manager_code, company_code) values('LM1', 'C1'), ('LM2', 'C2');
+
+create table Senior_Manager(senior_manager_code varchar(100), lead_manager_code varchar(100), company_code varchar(100));
+insert into Senior_Manager(senior_manager_code, lead_manager_code, company_code) values('SM1', 'LM1', 'C1'), ('SM2', 'LM1', 'C1'), ('SM3', 'LM1', 'C2');
+
+create table Manager(manager_code varchar(100), senior_manager_code varchar(100), lead_manager_code varchar(100), company_code varchar(100));
+insert into Manager(manager_code, senior_manager_code, lead_manager_code, company_code) values('M1', 'SM1', 'LM1', 'C1'), ('M2', 'SM3', 'LM2', 'C2'), ('M3', 'SM3', 'LM2', 'C2');
+
+create table Employee(employee_code varchar(100), manager_code varchar(100), senior_manager_code varchar(100), lead_manager_code varchar(100), company_code varchar(100));
+insert into Employee(employee_code, manager_code, senior_manager_code, lead_manager_code, company_code) values('E1', 'M1', 'SM1', 'LM1', 'C1'), ('E2', 'M1', 'SM1', 'LM1', 'C1'), ('E3', 'M2', 'SM3', 'LM2', 'C2'), ('E4', 'M2', 'SM3', 'LM2', 'C2');
+
+
 -- Note to use COUNT DISTINCT for counting duplicates
 SELECT DISTINCT COM_Founder.company_code company_code, COM_Founder.founder, num_lead_manager, num_senior_manager, num_manager, num_employee
 FROM
