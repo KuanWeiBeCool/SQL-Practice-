@@ -1,0 +1,26 @@
+-- Here is the code
+SELECT contest_id, hacker_id, name, SUM(sum_total_submissions) final_total_submissions, SUM(sum_total_accepted_submissions) final_total_accepted_submissions, SUM(sum_total_views) final_sum_total_views, SUM(sum_total_unique_views) final_sum_total_unique_views
+
+FROM
+
+(SELECT C.contest_id contest_id, C.hacker_id hacker_id, C.name name, H.college_id college_id, H.challenge_id challenge_id
+FROM Contests C INNER JOIN Colleges G ON C.contest_id = G.contest_id
+INNER JOIN Challenges H ON H.college_id = G.college_id) Contest
+
+LEFT JOIN
+
+(SELECT challenge_id, SUM(total_submissions) sum_total_submissions, SUM(total_accepted_submissions) sum_total_accepted_submissions FROM Submission_Stats
+GROUP BY challenge_id) Submission_Sum
+
+ON Contest.challenge_id = Submission_Sum.challenge_id
+
+LEFT JOIN
+
+(SELECT challenge_id, SUM(total_views) sum_total_views, SUM(total_unique_views) sum_total_unique_views FROM View_Stats 
+GROUP BY challenge_id) View_Sum
+
+ON Contest.challenge_id = View_Sum.challenge_id
+
+GROUP BY contest_id, hacker_id, name
+HAVING final_total_submissions > 0 OR final_total_accepted_submissions > 0 OR final_sum_total_views > 0 OR final_sum_total_unique_views > 0
+ORDER BY contest_id
