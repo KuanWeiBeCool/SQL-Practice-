@@ -1,0 +1,14 @@
+/*
+Enter your query here.
+*/
+SELECT Name_1 FROM  
+(SELECT S1.Name Name_1, P1.Salary Salary_1, S2.Name Name_2, P2.Salary Salary_2
+FROM Students S1
+INNER JOIN 
+Packages P1 ON S1.ID = P1.ID
+INNER JOIN
+Friends F ON S1.ID = F.ID
+INNER JOIN Students S2 ON F.Friend_ID = S2.ID 
+INNER JOIN Packages P2 ON S2.ID = P2.ID) Result
+WHERE Salary_1 < Salary_2
+ORDER BY Salary_2
