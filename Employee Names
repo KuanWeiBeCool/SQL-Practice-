@@ -1,0 +1,6 @@
+/*
+Enter your query here.
+*/
+SELECT Name
+FROM EMPLOYEE
+ORDER BY Name
