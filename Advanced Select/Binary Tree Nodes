@@ -1,0 +1,22 @@
+create table BST(N INTEGER, P INTEGER);
+insert into BST(N, P) values(1, 2), (3, 2), (6, 8), (9, 8), (2, 5), (8, 5), (5, null);
+
+
+SELECT N, 
+    CASE WHEN N NOT IN (SELECT P FROM BST WHERE P IS NOT NULL) THEN "Leaf"
+         WHEN P IS NULL THEN "Root"
+         ELSE "Inner"
+    END
+FROM BST
+ORDER BY N
+
+ 
+
+ 
+ 
+
+ 
+
+ 
+ 
+
