@@ -1,0 +1,17 @@
+-- Note to use COUNT DISTINCT for counting duplicates
+SELECT DISTINCT COM_Founder.company_code company_code, COM_Founder.founder, num_lead_manager, num_senior_manager, num_manager, num_employee
+FROM
+(SELECT company_code, founder FROM Company) COM_Founder
+INNER JOIN
+(SELECT company_code, COUNT(DISTINCT lead_manager_code) num_lead_manager FROM Lead_Manager
+GROUP BY company_code) COUNT_Lead_Manager ON COM_Founder.company_code = COUNT_Lead_Manager.company_code
+INNER JOIN
+(SELECT company_code, COUNT(DISTINCT senior_manager_code) num_senior_manager FROM Senior_Manager
+GROUP BY company_code) COUNT_Senior_Manager ON COM_Founder.company_code = COUNT_Senior_Manager.company_code
+INNER JOIN
+(SELECT company_code, COUNT(DISTINCT manager_code) num_manager FROM Manager
+GROUP BY company_code) COUNT_Manager ON COM_Founder.company_code = COUNT_Manager.company_code
+INNER JOIN 
+(SELECT company_code, COUNT(DISTINCT employee_code) num_employee FROM Employee
+GROUP BY company_code) COUNT_Employee ON COM_Founder.company_code = COUNT_Employee.company_code
+ORDER BY company_code
