@@ -1,0 +1,12 @@
+/*
+Enter your query here.
+*/
+SELECT Hackers.hacker_id, Name
+FROM 
+Hackers INNER JOIN Submissions ON Hackers.hacker_id = Submissions.hacker_id
+INNER JOIN Challenges ON Submissions.challenge_id = Challenges.challenge_id
+INNER JOIN Difficulty ON Challenges.difficulty_level = Difficulty.difficulty_level
+WHERE Submissions.score = Difficulty.score
+GROUP BY Hackers.hacker_id, Name
+HAVING COUNT(DISTINCT Challenges.challenge_id) > 1
+ORDER BY COUNT(DISTINCT Challenges.challenge_id) DESC, Hackers.hacker_id
