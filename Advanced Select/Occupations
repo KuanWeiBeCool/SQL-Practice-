@@ -1,0 +1,18 @@
+-- Note: we can use MIN or MAX to select the non-null value after GROUP BY.
+
+SET @r1 = 0, @r2 = 0, @r3 = 0, @r4 = 0;
+SELECT MIN(D), MIN(P), MIN(S), MIN(A)
+FROM
+(SELECT 
+CASE WHEN Occupation = 'Doctor' THEN Name END D, 
+CASE WHEN Occupation = 'Professor' THEN Name END P,
+CASE WHEN Occupation = 'Singer' THEN Name END S,
+CASE WHEN Occupation = 'Actor' THEN Name END A,
+CASE WHEN Occupation = 'Doctor' THEN @r1 := @r1 + 1
+     WHEN Occupation = 'Professor' THEN @r2 := @r2 + 1
+     WHEN Occupation = 'Singer' THEN @r3 := @r3 + 1
+     WHEN Occupation = 'Actor' THEN @r4 := @r4 + 1
+END RowNumber
+FROM OCCUPATIONS
+ORDER BY Name) Result
+GROUP BY RowNumber
