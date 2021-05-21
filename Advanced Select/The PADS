@@ -1,0 +1,10 @@
+-- Note that we can use two SELECT and the results will combine together
+(SELECT CONCAT(Name, '(', SUBSTR(Occupation, 1, 1), ')') Names
+FROM OCCUPATIONS
+ORDER BY Names);
+
+
+(SELECT CONCAT('There are a total of ', CAST(COUNT(*) AS CHAR), ' ', LOWER(OCCUPATION), 's.') 
+FROM OCCUPATIONS
+GROUP BY OCCUPATION
+ORDER BY COUNT(*))
