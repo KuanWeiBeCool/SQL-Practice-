@@ -1,0 +1,26 @@
+/*
+Enter your query here.
+*/
+WITH Temp AS (SELECT Students.Name Name, Grades.Grade Grade, Students.Marks Mark
+FROM Students, Grades
+WHERE Students.Marks BETWEEN Grades.Min_Mark AND Grades.Max_Mark)
+
+SELECT * FROM Temp WHERE Grade > 7 
+ORDER BY Grade DESC, Name;
+
+WITH Temp AS (SELECT Students.Name Name, Grades.Grade Grade, Students.Marks Mark
+FROM Students, Grades
+WHERE Students.Marks BETWEEN Grades.Min_Mark AND Grades.Max_Mark)
+
+SELECT Null, Grade, Mark FROM Temp WHERE Grade <= 7
+ORDER BY Grade DESC, Mark ASC;
+
+
+
+-- More concise solution
+-- Note that we can join two tables without a common key. This will be a Cross Join.
+-- Also note that WHERE happens first. Therefore, the grade we found is already between Min_Mark and Max_Mark before we use SELECT.
+SELECT IF(GRADE > 7, Name, Null), Grade, Marks
+FROM Students, Grades
+WHERE Marks BETWEEN Min_Mark AND Max_Mark
+ORDER BY Grade DESC, Name, Marks
