@@ -1,0 +1,14 @@
+/*
+Enter your query here.
+*/
+SELECT id, temp.age, temp.min_coins, temp.power
+FROM Wands 
+INNER JOIN Wands_Property ON Wands.code = Wands_Property.code
+INNER JOIN 
+(SELECT age, MIN(coins_needed) min_coins, power
+FROM Wands INNER JOIN Wands_Property ON Wands.code = Wands_Property.code
+WHERE is_evil = 0 
+GROUP BY age, power) TEMP 
+ON Wands.power = TEMP.power AND Wands_Property.age = TEMP.age AND Wands.coins_needed = TEMP.min_coins
+
+ORDER BY power DESC, age DESC
