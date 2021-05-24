@@ -1,0 +1,27 @@
+/*
+Enter your query here.
+*/
+SELECT Hackers.hacker_id, Hackers.name, Temp4.challenges_created challenges_created
+FROM
+Hackers
+INNER JOIN
+(SELECT hacker_id, COUNT(challenge_id) challenges_created
+FROM Challenges
+GROUP BY hacker_id) Temp4
+ON Hackers.hacker_id = Temp4.hacker_id
+INNER JOIN
+(SELECT challenges_created
+FROM
+(SELECT COUNT(hacker_id) count_same_challenges_created, challenges_created
+FROM
+(SELECT hacker_id, COUNT(challenge_id) challenges_created
+FROM Challenges
+GROUP BY hacker_id
+ORDER BY challenges_created DESC, hacker_id) Temp1
+GROUP BY challenges_created) Temp2
+WHERE count_same_challenges_created = 1 OR challenges_created = (SELECT MAX(challenges_created) FROM (SELECT hacker_id, COUNT(challenge_id) challenges_created
+FROM Challenges
+GROUP BY hacker_id
+ORDER BY challenges_created DESC, hacker_id) Temp1)) Temp3
+ON Temp4.challenges_created = Temp3.challenges_created
+ORDER BY challenges_created DESC, hacker_id
