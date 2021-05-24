@@ -1,0 +1,34 @@
+-- Use INNER JOIN to correspond the hacker_id with daily max submission to the name.
+SELECT Temp3.submission_date, Temp6.count_continuous_hacker, Hackers.hacker_id, Hackers.name
+FROM Hackers INNER JOIN
+-- Use INNER JOIN to correspond the count of submissions in each day to the max count of submission, so that we can find the hacker_id corresponds to the max count (we cannot group by hacker_id when group by submission_date to find the max count)
+(SELECT Temp1.submission_date, MIN(Temp1.hacker_id) max_count_submission_hacker_id
+FROM 
+(SELECT submission_date, hacker_id, COUNT(submission_id) count_submission_per_day
+FROM Submissions
+GROUP BY submission_date, hacker_id) Temp1
+INNER JOIN 
+-- Find max count of submission in each day
+(SELECT submission_date, MAX(count_submission_per_day) max_count_submission_per_day
+FROM 
+(SELECT submission_date, hacker_id, COUNT(submission_id) count_submission_per_day
+FROM Submissions
+GROUP BY submission_date, hacker_id) Temp1
+GROUP BY submission_date) Temp2 
+ON Temp1.submission_date = Temp2.submission_date AND Temp1.count_submission_per_day = Temp2.max_count_submission_per_day
+GROUP BY submission_date) Temp3
+ON Temp3.max_count_submission_hacker_id = Hackers.hacker_id
+INNER JOIN
+-- For the second column. First, find the number of distinct dates with same hacker_id smaller than a specific date. If it is a continuous hacker, this number should be equal to the number of days passed (i.e. date difference from the current date to the first date '2016-03-1' + 1). Finally, count the number of hacker_id that satisfies this condition.
+(SELECT submission_date_2, COUNT(hacker_id) count_continuous_hacker
+FROM
+(SELECT submission_date_2, hacker_id
+FROM
+(SELECT DISTINCT s1.submission_date submission_date_1, s2.submission_date submission_date_2, s1.hacker_id hacker_id
+FROM Submissions s1, Submissions s2
+WHERE s1.submission_date <= s2.submission_date AND s1.hacker_id = s2.hacker_id) Temp4
+GROUP BY submission_date_2, hacker_id
+HAVING COUNT(submission_date_1) = DATEDIFF(submission_date_2, '2016-03-01') + 1) Temp5
+GROUP BY submission_date_2) Temp6
+ON Temp3.submission_date = Temp6.submission_date_2
+ORDER BY Temp3.submission_date
