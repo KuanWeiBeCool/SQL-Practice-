@@ -1,0 +1,21 @@
+-- The tricky part of this question is to return NULL when there is no second highest salary. When we select a value from a template table, if the table does not have any value,
+-- we will get a NULL
+-- Note that we can use OFFSET to control the LIMIT. The LIMIT will start after the 2nd row when OFFSET=1.
+SELECT
+    (SELECT DISTINCT
+            Salary
+        FROM
+            Employee
+        ORDER BY Salary DESC
+        LIMIT 1 OFFSET 1) AS SecondHighestSalary
+;
+
+--OR we can use IFNULL(), which returns the first value if it is not null, else return the second value.
+
+SELECT
+    IFNULL(
+      (SELECT DISTINCT Salary
+       FROM Employee
+       ORDER BY Salary DESC
+        LIMIT 1 OFFSET 1),
+    NULL) AS SecondHighestSalary
