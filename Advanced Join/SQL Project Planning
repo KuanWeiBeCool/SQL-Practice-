@@ -1,0 +1,23 @@
+SELECT Start_Date, End_Date FROM
+(SELECT Start_Date, End_Date, DATEDIFF(day,Start_Date, End_Date) Day_Diff
+FROM
+(SELECT Row_Number() OVER (ORDER BY Start_Date) row_number, Start_Date
+FROM Projects
+WHERE Start_Date NOT IN 
+(SELECT P2.Start_Date
+FROM Projects P1 INNER JOIN Projects P2
+ON P1.End_Date = P2.Start_Date)) T1
+
+INNER JOIN
+
+(SELECT Row_Number() OVER (ORDER BY Start_Date) row_number, End_Date
+FROM Projects
+WHERE End_Date NOT IN 
+(SELECT P2.Start_Date
+FROM Projects P1 INNER JOIN Projects P2
+ON P1.End_Date = P2.Start_Date)) T2
+
+ON T1.row_number = T2.row_number
+) T3
+
+ORDER BY Day_Diff, Start_Date
