@@ -1,0 +1,9 @@
+-- Note that default function names such as Rank, row_number cannot be used as alias. So we have to add '' if we want to define the column name as Rank. 
+
+
+SELECT T2.Score, row_num 'Rank' FROM Scores
+LEFT JOIN
+(SELECT Score, ROW_NUMBER() OVER (ORDER BY Score DESC) AS row_num
+FROM (SELECT DISTINCT Score FROM Scores) T1) T2
+ON Scores.Score = T2.Score
+ORDER BY row_num ASC
