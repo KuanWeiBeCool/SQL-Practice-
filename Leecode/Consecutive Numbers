@@ -1,0 +1,24 @@
+-- My solution. Define a variable @r that increments if the previous number is equal to the current number. A number that appears 3 times consecutively will have a @r = 3. 
+
+SELECT DISTINCT num ConsecutiveNums 
+FROM
+(SELECT CASE WHEN pre_num = num THEN @r := @r + 1 ELSE @r := 1 END num_count, num
+FROM
+(SELECT @r := 1, LAG(num, 1) OVER (ORDER BY Id) pre_num, num FROM Logs) Temp) Temp2
+WHERE num_count >= 3
+
+
+-- Leetcode solution. This solution is very standard, but it becomes complicated if the consecutive number increases. So I think my solution is better.
+
+SELECT DISTINCT
+    l1.Num AS ConsecutiveNums
+FROM
+    Logs l1,
+    Logs l2,
+    Logs l3
+WHERE
+    l1.Id = l2.Id - 1
+    AND l2.Id = l3.Id - 1
+    AND l1.Num = l2.Num
+    AND l2.Num = l3.Num
+;
