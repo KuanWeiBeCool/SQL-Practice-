@@ -1,0 +1,7 @@
+SELECT D.Name Department, E.Name Employee, Salary
+FROM Employee E INNER JOIN Department D ON E.DepartmentId = D.Id
+INNER JOIN 
+(SELECT MAX(Salary) topSalary, DepartmentId
+FROM Employee
+GROUP BY DepartmentId) Temp ON E.DepartmentId = Temp.DepartmentId
+WHERE Salary = topSalary
