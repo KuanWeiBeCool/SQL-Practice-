@@ -1,0 +1,6 @@
+-- Be careful that here we cannot use 
+-- WHERE Name NOT IN (SELECT C.Name FROM Customers C INNER JOIN Orders O ON C.Id = O.CustomerId)
+-- because we can have duplicate names, and if one James bought items while the other James doesn't, we still exclude all James.
+
+SELECT Name Customers FROM Customers
+WHERE Id NOT IN (SELECT C.Id FROM Customers C INNER JOIN Orders O ON C.Id = O.CustomerId)
